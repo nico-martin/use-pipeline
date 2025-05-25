@@ -1,6 +1,7 @@
 import React from "react";
 import webWorkerPipeline from "./webWorkerPipeline/webWorkerPipeline";
 import { pipeline, PipelineType } from "@huggingface/transformers";
+import getSupportedDevice from "./deviceSupport/getSupportedDevice";
 
 export enum UsePipelineStatus {
   PRELOAD,
@@ -69,6 +70,10 @@ const usePipeline = <PayloadType = any, ResultType = any>(
           setProgress(Math.round((allLoaded / allTotal) * 100));
         }
       };
+
+      if (o.device) {
+        o.device = await getSupportedDevice(o.device);
+      }
 
       pipeRef.current = worker
         ? await webWorkerPipeline(worker, task, model_id, o)

@@ -16,7 +16,7 @@ function App() {
     "", //"Xenova/bert-base-multilingual-uncased-sentiment",
     {
       progress_callback: console.log,
-      device: "webgpu",
+      device: ["webgpu", "wasm"],
       dtype: "q4",
     },
     new Worker(new URL("./worker.ts", import.meta.url), {
