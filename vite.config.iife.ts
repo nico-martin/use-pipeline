@@ -8,11 +8,11 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, "src/index.ts"),
       name: "usePipeline",
-      formats: ["es", "cjs"],
-      fileName: (format) => `use-pipeline.${format}.js`,
+      formats: ["iife"],
+      fileName: () => `use-pipeline.iife.js`,
     },
     rollupOptions: {
-      external: ["react", "@huggingface/transformers"],
+      external: ["react"],
       output: {
         globals: {
           react: "React",
