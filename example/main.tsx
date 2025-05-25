@@ -32,7 +32,7 @@ function App() {
         disabled={status === UsePipelineStatus.LOADING}
         onClick={async () => {
           const text = textareaRef?.current?.value || "";
-          const res = await pipe(text);
+          const res = await pipe(text, { top_k: null });
           setResult(res);
         }}
       >

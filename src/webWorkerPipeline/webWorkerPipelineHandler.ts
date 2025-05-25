@@ -21,7 +21,14 @@ const webWorkerPipelineHandler = () => {
 
   return {
     onmessage: async (event: MessageEvent) => {
-      const { id, data, task, model_id, options } = event.data;
+      const {
+        id,
+        data,
+        task,
+        model_id,
+        options,
+        pipeOptions = {},
+      } = event.data;
       const key = JSON.stringify({ task, model_id, options });
       let pipe = pipelines.get(key);
       if (!pipe) {
@@ -29,7 +36,8 @@ const webWorkerPipelineHandler = () => {
         pipelines.set(key, pipe);
       }
       self.postMessage({ id, type: "ready" });
-      const result = data ? await pipe(data) : null;
+      console.log("pipeOptions", pipeOptions);
+      const result = data ? await pipe(data, pipeOptions) : null;
       self.postMessage({ id, type: "result", result });
     },
   };

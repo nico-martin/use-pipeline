@@ -40,7 +40,7 @@ const webWorkerPipeline = <PayloadType = any, ResultType = any>(
       }
       if (msg?.type === "result") {
         if (msg?.id === "init") {
-          resolve((data: PayloadType) => {
+          resolve((data: PayloadType, pipeOptions: Record<string, any>) => {
             return new Promise<any>((resolve, reject) => {
               const id = messageIdCounter++;
               messagesResolversMap.set(id, { resolve, reject });
@@ -51,6 +51,7 @@ const webWorkerPipeline = <PayloadType = any, ResultType = any>(
                 task,
                 model_id,
                 options: options ? serializeOptions(options) : {},
+                pipeOptions,
               });
             });
           });
