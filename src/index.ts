@@ -1,3 +1,2 @@
-import usePipeline from "./usePipeline";
-
-export default usePipeline;
+export { default as usePipeline } from "./usePipeline";
+export { default as webWorkerPipelineHandler } from "./webWorkerPipeline/webWorkerPipelineHandler";
