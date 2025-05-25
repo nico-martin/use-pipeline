@@ -98,3 +98,5 @@ const { pipe} = usePipeline(
 ```
 
 In this case, if the client supports WebGPU, it will use WebGPU, otherwise it will use wasm.
+
+> !!! This feature is highly experimental. For now, only the `webgpu` check does work. It might change in the future or will be removed.
