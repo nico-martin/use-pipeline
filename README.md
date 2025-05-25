@@ -2,6 +2,11 @@
 
 This is a react hook that wraps the transformers.js pipeline API.
 
+## getting started
+```
+npm i use-pipeline @huggingface/transformers
+```
+
 ## minimal example
 You can use the hook with just the task and the model_id of the model you want to use. 
 ```javascript
