@@ -73,7 +73,6 @@ const usePipeline = <PayloadType = any, ResultType = any>(
 
       if (o.device) {
         o.device = await getSupportedDevice(o.device);
-        console.log(o.device);
       }
 
       pipeRef.current = worker
