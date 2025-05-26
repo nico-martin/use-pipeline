@@ -1,8 +1,9 @@
 import { DeviceType } from "@huggingface/transformers/types/utils/devices";
 
 const SUPPORTED_CHECKS: Partial<Record<DeviceType, () => Promise<boolean>>> = {
-  // @ts-ignore
-  webgpu: async () => Boolean(await navigator.gpu.requestAdapter()),
+  webgpu: async () =>
+    // @ts-ignore
+    "gpu" in navigator && Boolean(await navigator?.gpu?.requestAdapter()),
 };
 
 const getSupportedDevice = async (

@@ -1,6 +1,6 @@
 {
   "name": "use-pipeline",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "A react hook that wraps the transformers.js pipeline API",
   "main": "dist/use-pipeline.cjs.js",
   "module": "dist/use-pipeline.es.js",
