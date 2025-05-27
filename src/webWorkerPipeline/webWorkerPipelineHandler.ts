@@ -36,7 +36,6 @@ const webWorkerPipelineHandler = () => {
         pipelines.set(key, pipe);
       }
       self.postMessage({ id, type: "ready" });
-      console.log("pipeOptions", pipeOptions);
       const result = data ? await pipe(data, pipeOptions) : null;
       self.postMessage({ id, type: "result", result });
     },

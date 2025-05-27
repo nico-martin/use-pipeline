@@ -67,7 +67,12 @@ const usePipeline = <PayloadType = any, ResultType = any>(
               allLoaded += loaded;
             },
           );
-          setProgress(Math.round((allLoaded / allTotal) * 100));
+          const hasOnnxFile = Boolean(
+            Object.keys(progressElements.current).find((file) =>
+              file.endsWith(".onnx"),
+            ),
+          );
+          hasOnnxFile && setProgress(Math.round((allLoaded / allTotal) * 100));
         }
       };
 
