@@ -46,7 +46,7 @@ const App = () => {
 ```javascript
 // worker.js
 import { webWorkerPipelineHandler } from "use-pipeline";
-self.onmessage = webWorkerPipelineHandler().handler
+self.onmessage = webWorkerPipelineHandler().onmessage
 ```
 ### Webpack
 
@@ -87,7 +87,7 @@ const App = () => {
 ```javascript
 // pipeline.worker.js
 import { webWorkerPipelineHandler } from "use-pipeline";
-self.onmessage = webWorkerPipelineHandler().handler
+self.onmessage = webWorkerPipelineHandler().onmessage
 ```
 
 ## options.device

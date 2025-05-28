@@ -1,6 +1,6 @@
 {
   "name": "use-pipeline",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "A react hook that wraps the transformers.js pipeline API",
   "main": "dist/use-pipeline.cjs.js",
   "module": "dist/use-pipeline.es.js",
@@ -17,15 +17,17 @@
     "README.md"
   ],
   "scripts": {
+    "clean": "rimraf dist",
     "dev": "vite",
     "build:es-cjs": "vite build --config vite.config.ts",
     "build:iife": "vite build --config vite.config.iife.ts",
-    "build": "npm run build:es-cjs && npm run build:iife && tsc -p tsconfig.build.json",
+    "build:worker": "vite build --config vite.worker.config.ts",
+    "build": "npm run clean && npm run build:worker && npm run build:es-cjs && npm run build:iife && tsc -p tsconfig.build.json",
     "preview": "vite preview"
   },
   "peerDependencies": {
-    "react": "^18.0.0",
-    "@huggingface/transformers": "^3.5.1"
+    "@huggingface/transformers": "^3.5.1",
+    "react": "^18.0.0"
   },
   "dependencies": {
     "@huggingface/transformers": "^3.5.1"
@@ -35,6 +37,8 @@
     "@vitejs/plugin-react": "^4.0.0",
     "prettier": "^3.5.3",
     "react": "^19.1.0",
+    "rimraf": "^6.0.1",
+    "terser": "^5.40.0",
     "typescript": "^5.4.0",
     "vite": "^5.0.0"
   },
