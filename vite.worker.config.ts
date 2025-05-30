@@ -10,13 +10,12 @@ export default defineConfig({
       name: "worker",
       fileName: () => `worker.compiled.js`,
     },
+    target: "esnext",
     rollupOptions: {
       external: [],
       output: {
         globals: {},
       },
     },
-    minify: "terser",
-    target: "esnext",
   },
 });

@@ -19,9 +19,7 @@ function App() {
       device: ["webgpu", "wasm"],
       dtype: "q4",
     },
-    new Worker(new URL("./worker.ts", import.meta.url), {
-      type: "module",
-    }),
+    true,
   );
 
   return (

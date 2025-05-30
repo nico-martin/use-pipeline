@@ -2,6 +2,7 @@ import React from "react";
 import webWorkerPipeline from "./webWorkerPipeline/webWorkerPipeline";
 import { pipeline, PipelineType } from "@huggingface/transformers";
 import getSupportedDevice from "./deviceSupport/getSupportedDevice";
+import getLazyWorker from "./utils/getLazyWorker";
 
 export enum UsePipelineStatus {
   PRELOAD,
@@ -13,7 +14,7 @@ const usePipeline = <PayloadType = any, ResultType = any>(
   task: PipelineType,
   model_id: string,
   options: Record<string, any> = {},
-  worker?: Worker,
+  worker?: Worker | true,
 ): {
   pipe: (
     data: PayloadType,
@@ -78,6 +79,10 @@ const usePipeline = <PayloadType = any, ResultType = any>(
 
       if (o.device) {
         o.device = await getSupportedDevice(o.device);
+      }
+
+      if (worker === true) {
+        worker = await getLazyWorker();
       }
 
       pipeRef.current = worker
