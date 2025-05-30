@@ -32,13 +32,18 @@ As you can see, all the messaging between the app and the worker is abstracted a
 import { usePipeline } from "use-pipeline";
 
 const App = () => {
+    const worker = React.useMemo(
+        () => new Worker(new URL("./worker.ts", import.meta.url), {
+            type: "module",
+        }),
+        [],
+    );
+    
     const { pipe} = usePipeline(
         "text-classification", // task
         "Xenova/distilbert-base-uncased-finetuned-sst-2-english", // model_id
         {}, // transformers.js pipeline options
-        new Worker(new URL("./worker.js", import.meta.url), {
-            type: "module",
-        })
+        worker
     );
     return <button onClick={() => pipe('I love transformers.js').then(console.log)}>run</button>;
 }
