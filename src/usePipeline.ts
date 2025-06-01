@@ -14,7 +14,7 @@ const usePipeline = <PayloadType = any, ResultType = any>(
   task: PipelineType,
   model_id: string,
   options: Record<string, any> = {},
-  outsideWorker: Worker | true = true,
+  outsideWorker: Worker | boolean = true,
 ): {
   pipe: (
     data: PayloadType,
@@ -39,13 +39,15 @@ const usePipeline = <PayloadType = any, ResultType = any>(
         const blob = new Blob([rawDefaultWorker], {
           type: "application/javascript",
         });
-        defaultWorkerRef.current = new Worker(URL.createObjectURL(blob));
+        defaultWorkerRef.current = new Worker(URL.createObjectURL(blob), {
+          type: "module",
+        });
       }
       return defaultWorkerRef.current;
-    } else if (Boolean(outsideWorker)) {
-      return outsideWorker;
+    } else if (outsideWorker === false) {
+      return null;
     }
-    return null;
+    return outsideWorker;
   }, [outsideWorker]);
 
   const hasWorker = React.useMemo(() => Boolean(worker), [worker]);

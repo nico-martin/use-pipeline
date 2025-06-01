@@ -1,6 +1,6 @@
 {
   "name": "use-pipeline",
-  "version": "0.0.18",
+  "version": "0.0.33",
   "description": "A react hook that wraps the transformers.js pipeline API",
   "main": "dist/use-pipeline.cjs.js",
   "module": "dist/use-pipeline.es.js",
@@ -18,7 +18,8 @@
   ],
   "scripts": {
     "clean": "rimraf dist",
-    "build": "npm run clean && node build.mjs && tsc -p tsconfig.build.json"
+    "build": "npm run clean && node build.mjs && tsc -p tsconfig.build.json",
+    "deploy": "node scripts/updateVersion.mjs patch && npm run build && npm publish"
   },
   "dependencies": {
     "@huggingface/transformers": "^3.5.1",

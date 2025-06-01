@@ -1,4 +1,5 @@
 import { build } from "esbuild";
+import esbuildRawPlugin from "./esbuild/esbuildRawPlugin.mjs";
 
 const mainConfig = {
   bundle: true,
@@ -6,6 +7,7 @@ const mainConfig = {
   minifySyntax: true,
   treeShaking: true,
   logLevel: "info",
+  plugins: [esbuildRawPlugin()],
 };
 
 await build({

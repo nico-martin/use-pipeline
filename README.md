@@ -21,7 +21,7 @@ const App = () => {
 ```
 A WebWorker is then automatically instantiated in the background, in which the calculations are performed.
 
-## pass your own WebWorker
+## use your own WebWorker
 
 If you want to you can also use your own WebWorker.  
 Since working with WebWorkers is often a bit unfamiliar, I have tried to make it as simple as possible. In the WebWorker, all you need to do is to call the `webWorkerPipelineHandler().onmessage`.  

@@ -46,7 +46,7 @@ const webWorkerPipeline = <PayloadType = any, ResultType = any>(
               messagesResolversMap.set(id, { resolve, reject });
               worker.postMessage({
                 id,
-                type: "pipe",
+                type: "tfjs_pipe",
                 data,
                 task,
                 model_id,
@@ -69,10 +69,10 @@ const webWorkerPipeline = <PayloadType = any, ResultType = any>(
     messagesResolversMap.set("init", { resolve, reject });
     worker.postMessage({
       id: "init",
-      type: "pipe",
+      type: "tfjs_pipe",
       data: null,
-      task,
-      model_id,
+      task: task ?? "",
+      model_id: model_id ?? "",
       options: options ? serializeOptions(options) : {},
     });
   });

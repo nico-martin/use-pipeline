@@ -22,6 +22,7 @@ const webWorkerPipelineHandler = () => {
 
   return {
     onmessage: async (event: MessageEvent) => {
+      if (!event?.data || event.data?.type !== "tfjs_pipe") return;
       const {
         id,
         data,
