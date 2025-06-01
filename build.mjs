@@ -15,6 +15,9 @@ await build({
   format: "esm",
   external: ["react", "@huggingface/transformers"],
   entryPoints: ["./src/worker.ts"],
+  define: {
+    __IS_WORKER__: "true",
+  },
 });
 
 const usePipelineConfig = {
@@ -22,6 +25,9 @@ const usePipelineConfig = {
   entryPoints: ["src/index.ts"],
   platform: "neutral",
   external: ["react"],
+  define: {
+    __IS_WORKER__: "false",
+  },
 };
 
 await build({

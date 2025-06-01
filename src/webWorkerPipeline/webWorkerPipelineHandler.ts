@@ -33,7 +33,8 @@ const webWorkerPipelineHandler = () => {
       const key = JSON.stringify({ task, model_id, options });
       let pipe = pipelines.get(key);
       if (!pipe) {
-        const { pipeline } = await getPipeline();
+        const { pipeline } =
+          (await getPipeline()) as typeof import("@huggingface/transformers");
         pipe = await pipeline(task, model_id, unserializeOptions(options));
         pipelines.set(key, pipe);
       }
