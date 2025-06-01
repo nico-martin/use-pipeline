@@ -16,7 +16,7 @@ const App = () => {
         "text-classification", // task
         "Xenova/distilbert-base-uncased-finetuned-sst-2-english", // model_id
     );
-    return <button onClick={() => pipe('I love transformers.js').then(console.log)}>run</button>;
+    return <button onClick={() => pipe(['I love transformers.js']).then(console.log)}>run</button>;
 }
 ```
 A WebWorker is then automatically instantiated in the background, in which the calculations are performed.
@@ -47,7 +47,7 @@ const App = () => {
         {}, // transformers.js pipeline options
         worker
     );
-    return <button onClick={() => pipe('I love transformers.js').then(console.log)}>run</button>;
+    return <button onClick={() => pipe(['I love transformers.js']).then(console.log)}>run</button>;
 }
 ```
 ```javascript
@@ -88,7 +88,7 @@ const App = () => {
         {}, // transformers.js pipeline options
         Worker
     );
-    return <button onClick={() => pipe('I love transformers.js').then(console.log)}>run</button>;
+    return <button onClick={() => pipe(['I love transformers.js']).then(console.log)}>run</button>;
 }
 ```
 ```javascript

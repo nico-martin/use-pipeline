@@ -3,15 +3,22 @@ import { createRoot } from "react-dom/client";
 
 import usePipeline, { UsePipelineStatus } from "../../src/usePipeline";
 
+const toLabelScore = (obj: any): { label: string; score: number } => ({
+  label: obj.label,
+  score: obj.score,
+});
+
+const unifyResult = (res: any): { label: string; score: number }[] =>
+  Array.isArray(res[0])
+    ? (res as any[][]).flat().map(toLabelScore)
+    : (res as any[]).map(toLabelScore);
+
 function App() {
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
   const [result, setResult] = React.useState<
     Array<{ label: string; score: number }>
   >([]);
-  const { pipe, status, progress } = usePipeline<
-    string,
-    Array<{ label: string; score: number }>
-  >(
+  const { pipe, status, progress } = usePipeline(
     "text-classification",
     "", //"Xenova/bert-base-multilingual-uncased-sentiment",
     {
@@ -29,8 +36,8 @@ function App() {
         disabled={status === UsePipelineStatus.LOADING}
         onClick={async () => {
           const text = textareaRef?.current?.value || "";
-          const res = await pipe(text, { top_k: null });
-          setResult(res);
+          const res = await pipe([text, { top_k: 10 }]);
+          setResult(unifyResult(res));
         }}
       >
         {status === UsePipelineStatus.LOADING

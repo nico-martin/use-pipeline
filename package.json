@@ -22,7 +22,7 @@
     "deploy": "node scripts/updateVersion.mjs patch && npm run build && npm publish"
   },
   "dependencies": {
-    "@huggingface/transformers": "^3.5.1",
+    "@huggingface/transformers": "^3.5.2",
     "react": "^19.1.0"
   },
   "devDependencies": {

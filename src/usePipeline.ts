@@ -1,8 +1,25 @@
 import React from "react";
 import webWorkerPipeline from "./webWorkerPipeline/webWorkerPipeline";
-import { pipeline, PipelineType } from "@huggingface/transformers";
+import {
+  pipeline,
+  PipelineType,
+  PretrainedModelOptions,
+} from "@huggingface/transformers";
 import getSupportedDevice from "./deviceSupport/getSupportedDevice";
 import rawDefaultWorker from "../dist/worker.compiled.js?raw";
+import { DeviceType } from "@huggingface/transformers/types/utils/devices";
+
+type PipelineFn<T extends PipelineType> = Awaited<
+  ReturnType<typeof pipeline<T>>
+>;
+type PipelineInput<T extends PipelineType> = Parameters<PipelineFn<T>>;
+type PipelineOutput<T extends PipelineType> = Awaited<
+  ReturnType<PipelineFn<T>>
+>;
+
+interface ModelOptions extends Omit<PretrainedModelOptions, "device"> {
+  device: DeviceType | Array<DeviceType>;
+}
 
 export enum UsePipelineStatus {
   PRELOAD,
@@ -10,16 +27,13 @@ export enum UsePipelineStatus {
   READY,
 }
 
-const usePipeline = <PayloadType = any, ResultType = any>(
-  task: PipelineType,
+const usePipeline = <T extends PipelineType>(
+  task: T,
   model_id: string,
-  options: Record<string, any> = {},
+  options?: ModelOptions,
   outsideWorker: Worker | boolean = true,
 ): {
-  pipe: (
-    data: PayloadType,
-    options?: Record<string, any>,
-  ) => Promise<ResultType>;
+  pipe: (data: PipelineInput<T>) => Promise<PipelineOutput<T>>;
   status: UsePipelineStatus;
   progress: number;
 } => {
@@ -57,54 +71,51 @@ const usePipeline = <PayloadType = any, ResultType = any>(
     setStatus(UsePipelineStatus.PRELOAD);
   }, [task, model_id, optionsKey, hasWorker]);
 
-  const pipe = async (
-    data: PayloadType,
-    pipeOptions: Record<string, any> = {},
-  ) => {
+  const pipe = async (data: PipelineInput<T>) => {
     if (!pipeRef.current) {
       setStatus(UsePipelineStatus.LOADING);
 
-      const o = { ...options };
-      o.progress_callback = (data: any) => {
-        if ("progress_callback" in options) {
-          options.progress_callback(data);
-        }
-        if (
-          typeof data === "object" &&
-          "status" in data &&
-          data.status === "progress"
-        ) {
-          progressElements.current[data.file] = {
-            loaded: data.loaded,
-            total: data.total,
-          };
-          let allTotal = 0;
-          let allLoaded = 0;
-          Object.entries(progressElements.current).forEach(
-            ([file, { loaded, total }]) => {
-              allTotal += total;
-              allLoaded += loaded;
-            },
-          );
-          const hasOnnxFile = Boolean(
-            Object.keys(progressElements.current).find((file) =>
-              file.endsWith(".onnx"),
-            ),
-          );
-          hasOnnxFile && setProgress(Math.round((allLoaded / allTotal) * 100));
-        }
+      const o: PretrainedModelOptions = {
+        ...options,
+        progress_callback: (data: any) => {
+          if ("progress_callback" in options) {
+            options.progress_callback(data);
+          }
+          if (
+            typeof data === "object" &&
+            "status" in data &&
+            data.status === "progress"
+          ) {
+            progressElements.current[data.file] = {
+              loaded: data.loaded,
+              total: data.total,
+            };
+            let allTotal = 0;
+            let allLoaded = 0;
+            Object.entries(progressElements.current).forEach(
+              ([file, { loaded, total }]) => {
+                allTotal += total;
+                allLoaded += loaded;
+              },
+            );
+            const hasOnnxFile = Boolean(
+              Object.keys(progressElements.current).find((file) =>
+                file.endsWith(".onnx"),
+              ),
+            );
+            hasOnnxFile &&
+              setProgress(Math.round((allLoaded / allTotal) * 100));
+          }
+        },
+        device: await getSupportedDevice(options.device),
       };
-
-      if (o.device) {
-        o.device = await getSupportedDevice(o.device);
-      }
 
       pipeRef.current = worker
         ? await webWorkerPipeline(worker, task, model_id, o)
         : await pipeline(task, model_id, o);
       setStatus(UsePipelineStatus.READY);
     }
-    return pipeRef.current(data, pipeOptions);
+    return pipeRef.current(...data);
   };
 
   return {
