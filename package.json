@@ -18,23 +18,20 @@
   ],
   "scripts": {
     "clean": "rimraf dist",
-    "build": "npm run clean && node build.worker.mjs && tsc -p tsconfig.build.json",
-    "preview": "vite preview"
+    "build": "npm run clean && node build.worker.mjs && tsc -p tsconfig.build.json"
   },
   "dependencies": {
     "@huggingface/transformers": "^3.5.1",
-    "react": "^18.0.0"
+    "react": "^19.1.0"
   },
   "devDependencies": {
     "@types/react": "^19.1.5",
-    "@vitejs/plugin-react": "^4.0.0",
     "esbuild": "^0.25.5",
     "prettier": "^3.5.3",
     "react": "^19.1.0",
     "rimraf": "^6.0.1",
     "terser": "^5.40.0",
-    "typescript": "^5.4.0",
-    "vite": "^5.0.0"
+    "typescript": "^5.4.0"
   },
   "repository": {
     "type": "git",
