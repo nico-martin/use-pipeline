@@ -2,6 +2,7 @@ import React from "react";
 import webWorkerPipeline from "./webWorkerPipeline/webWorkerPipeline";
 import { pipeline, PipelineType } from "@huggingface/transformers";
 import getSupportedDevice from "./deviceSupport/getSupportedDevice";
+import rawDefaultWorker from "../dist/worker.compiled.js?raw";
 
 export enum UsePipelineStatus {
   PRELOAD,
@@ -13,7 +14,7 @@ const usePipeline = <PayloadType = any, ResultType = any>(
   task: PipelineType,
   model_id: string,
   options: Record<string, any> = {},
-  worker?: Worker,
+  outsideWorker: Worker | true = true,
 ): {
   pipe: (
     data: PayloadType,
@@ -25,12 +26,28 @@ const usePipeline = <PayloadType = any, ResultType = any>(
   const [status, setStatus] = React.useState<UsePipelineStatus>(
     UsePipelineStatus.PRELOAD,
   );
+  const defaultWorkerRef = React.useRef<Worker>(null);
   const pipeRef = React.useRef<any>(null);
   const progressElements = React.useRef<
     Record<string, { loaded: number; total: number }>
   >({});
   const [progress, setProgress] = React.useState<number>(0);
   const optionsKey = React.useMemo(() => JSON.stringify(options), [options]);
+  const worker: Worker = React.useMemo(() => {
+    if (outsideWorker === true) {
+      if (!defaultWorkerRef?.current) {
+        const blob = new Blob([rawDefaultWorker], {
+          type: "application/javascript",
+        });
+        defaultWorkerRef.current = new Worker(URL.createObjectURL(blob));
+      }
+      return defaultWorkerRef.current;
+    } else if (Boolean(outsideWorker)) {
+      return outsideWorker;
+    }
+    return null;
+  }, [outsideWorker]);
+
   const hasWorker = React.useMemo(() => Boolean(worker), [worker]);
 
   React.useEffect(() => {

@@ -14,7 +14,8 @@
     "declarationDir": "dist",
     "outDir": "dist",
     "strict": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "strictNullChecks": false
   },
   "include": [
     "src",

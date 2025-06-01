@@ -19,10 +19,12 @@ const App = () => {
     return <button onClick={() => pipe('I love transformers.js').then(console.log)}>run</button>;
 }
 ```
-## worker example (recommended)
+A WebWorker is then automatically instantiated in the background, in which the calculations are performed.
 
-However, it is highly recommended to use the "worker-mode", where the model runs in a separate worker-thread.  
-To make the experience for you as delightful as possible while also giving you the flexibility to choose the build tool you want, we split the logic in two parts.
+## pass your own WebWorker
+
+If you want to you can also use your own WebWorker.  
+Since working with WebWorkers is often a bit unfamiliar, I have tried to make it as simple as possible. In the WebWorker, all you need to do is to call the `webWorkerPipelineHandler().onmessage`.  
 As you can see, all the messaging between the app and the worker is abstracted away by the library.
 
 ### Vite
