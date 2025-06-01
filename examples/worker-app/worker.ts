@@ -1,4 +1,4 @@
-import webWorkerPipelineHandler from "../src/webWorkerPipeline/webWorkerPipelineHandler";
+import webWorkerPipelineHandler from "../../src/webWorkerPipeline/webWorkerPipelineHandler";
 
 const handler = webWorkerPipelineHandler();
 self.onmessage = (msg: MessageEvent) => {

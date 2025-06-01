@@ -1,7 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 
-import usePipeline, { UsePipelineStatus } from "../src/usePipeline";
+import usePipeline, { UsePipelineStatus } from "../../src/usePipeline";
 
 function App() {
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
@@ -19,7 +19,6 @@ function App() {
       device: ["webgpu", "wasm"],
       dtype: "q4",
     },
-    true,
   );
 
   return (

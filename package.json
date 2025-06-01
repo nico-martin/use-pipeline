@@ -7,9 +7,9 @@
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "require": "./dist/use-pipeline.cjs.js",
-      "import": "./dist/use-pipeline.es.js",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/use-pipeline.es.js"
     }
   },
   "files": [
@@ -18,23 +18,17 @@
   ],
   "scripts": {
     "clean": "rimraf dist",
-    "dev": "vite",
-    "build:es-cjs": "vite build --config vite.config.ts",
-    "build:iife": "vite build --config vite.config.iife.ts",
-    "build:worker": "vite build --config vite.worker.config.ts",
-    "build": "npm run clean && npm run build:worker && npm run build:es-cjs && npm run build:iife && tsc -p tsconfig.build.json",
+    "build": "npm run clean && node build.worker.mjs && tsc -p tsconfig.build.json",
     "preview": "vite preview"
   },
-  "peerDependencies": {
+  "dependencies": {
     "@huggingface/transformers": "^3.5.1",
     "react": "^18.0.0"
-  },
-  "dependencies": {
-    "@huggingface/transformers": "^3.5.1"
   },
   "devDependencies": {
     "@types/react": "^19.1.5",
     "@vitejs/plugin-react": "^4.0.0",
+    "esbuild": "^0.25.5",
     "prettier": "^3.5.3",
     "react": "^19.1.0",
     "rimraf": "^6.0.1",
